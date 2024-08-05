@@ -37,7 +37,7 @@ class _TaskScreenState extends State<TaskScreen> {
                 "To Do List",
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 24,
+                    fontSize: 25,
                     fontWeight: FontWeight.bold),
               ),
             ],
