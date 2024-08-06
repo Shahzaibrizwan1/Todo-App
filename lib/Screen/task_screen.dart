@@ -42,18 +42,23 @@ class _TaskScreenState extends State<TaskScreen> {
               ),
             ],
           )),
-      body: ListView.separated(
-          itemBuilder: (context, index) {
-            return const TaskWidget();
-          },
-          separatorBuilder: (context, index) {
-            return const Divider(
-              color: primary,
-              height: 1,
-              thickness: 1,
-            );
-          },
-          itemCount: 5),
+      body: Consumer<TaskViewModel>(builder: (context, taskProvider, _) {
+        return ListView.separated(
+            itemBuilder: (context, index) {
+              final task = taskProvider.tasks[index];
+              return TaskWidget(
+                Task: task,
+              );
+            },
+            separatorBuilder: (context, index) {
+              return const Divider(
+                color: primary,
+                height: 1,
+                thickness: 1,
+              );
+            },
+            itemCount: taskProvider.tasks.length);
+      }),
       floatingActionButton: const CustomFab(),
     );
   }
@@ -62,19 +67,23 @@ class _TaskScreenState extends State<TaskScreen> {
 class TaskWidget extends StatelessWidget {
   const TaskWidget({
     super.key,
+    required this.Task,
   });
 
+  final Task;
   @override
   Widget build(BuildContext context) {
-    return const ListTile(
+    return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
       title: Text(
-        "Doctor Check up",
-        style: TextStyle(
-            color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+        Task.TaskName, style: TextStyle(color: Colors.white),
+        // "Doctor Check up",
+
+        // style: TextStyle(
+        //     color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
       ),
       subtitle: Text(
-        "Tommorow 3:31 pm",
+        "${Task.Date}, ${Task.Time}",
         style: TextStyle(color: textBlue),
       ),
     );
@@ -97,7 +106,7 @@ class CustomFab extends StatelessWidget {
               return const CustomDialog();
             });
       },
-      child: Icon(
+      child: const Icon(
         Icons.add,
         size: 39,
         color: Colors.white,
@@ -233,7 +242,8 @@ class CustomTextField extends StatelessWidget {
         readOnly: readonly,
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
-          // hintText: "Enter a Task", hintStyle: TextStyle(color: Colors.grey)
+          // hintText: "Enter a Task",
+          //   hintStyle: TextStyle(color: Colors.white),
           suffixIcon: InkWell(
               onTap: onTap,
               child: Icon(

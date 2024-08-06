@@ -19,7 +19,9 @@ class TaskViewModel extends ChangeNotifier {
   final TimeCount = TextEditingController();
 
   bool get isvalid =>
-      TaskName != null && DateCount.text == "" && TimeCount.text == "";
+      TaskName != null &&
+      DateCount.text.isNotEmpty &&
+      TimeCount.text.isNotEmpty;
 
   setDate(DateTime? date) {
     if (date == null) {
@@ -60,11 +62,13 @@ class TaskViewModel extends ChangeNotifier {
   }
 
   addTask() {
-    // if (!isvalid) {
-    //   return;
-    // }
+    if (!isvalid) {
+      return;
+    }
     final task = Task(TaskName!, DateCount.text, TimeCount.text);
     tasks.add(task);
+    TimeCount.clear();
+    DateCount.clear();
     print(tasks.length.toString());
     notifyListeners();
   }
